@@ -4,9 +4,6 @@ import { Trash2 } from "lucide-react";
 function UsersList({ users, deleteUser }) {
   return (
     <div>
-      <h1 className="text-3xl text-slate-700 font-bold text-center mb-4 mt-6">
-        Lista de Usuários
-      </h1>
       <div className="mt-6 flex flex-col gap-4">
         {users.length === 0 ? (
           <div className="text-slate-400 text-center">
