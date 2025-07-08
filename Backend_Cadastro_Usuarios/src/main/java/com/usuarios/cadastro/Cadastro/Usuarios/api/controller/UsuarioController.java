@@ -16,6 +16,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<UsuarioInfoDto> novoUsuario(@RequestBody UsuarioNovoDto dto){
         UsuarioInfoDto usuario = usuarioService.addUsuario(dto);
@@ -23,9 +24,17 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<List<UsuarioInfoDto>> getAll(){
         return ResponseEntity.ok(usuarioService.getAll());
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUsuario(@PathVariable Long id){
+        usuarioService.deleteUsuario(id);
+        return ResponseEntity.ok("Usuario deletado com sucesso!");
     }
 
 }

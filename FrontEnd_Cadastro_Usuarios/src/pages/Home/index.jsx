@@ -1,26 +1,45 @@
+import { useEffect, useState, useRef } from "react"; // sempre executar quando a pagina abrir
 import { Trash2 } from "lucide-react";
+import api from "../../services/api";
 
 function Home() {
-  const users = [
-    {
-      id: 1,
-      nome: "João",
-      idade: 25,
-      email: "teste@teste.com",
-    },
-    {
-      id: 2,
-      nome: "Maria",
-      idade: 30,
-      email: "teste2@gmailcom",
-    },
-    {
-      id: 3,
-      nome: "Pedro",
-      idade: 22,
-      email: "ola@teste.com.br",
-    },
-  ];
+  const [users, setUsers] = useState([]); // estado para armazenar os usuários
+
+  const inputName = useRef();
+  const inputAge = useRef();
+  const inputEmail = useRef();
+
+  //async é uma função que depende de uma resposta de uma API, ou seja, é uma função assíncrona
+
+  async function getUsers() {
+    const usersFromApi = await api.get("/usuarios");
+
+    setUsers(usersFromApi.data); // atualiza o estado com os usuários recebidos da API
+  }
+
+  async function createUsers() {
+    await api.post("/usuarios", {
+      nome: inputName.current.value, // pega o valor do input de nome
+      idade: inputAge.current.value, // pega o valor do input de idade
+      email: inputEmail.current.value, // pega o valor do input de email
+    });
+
+    // Limpa os campos após cadastrar
+    inputName.current.value = "";
+    inputAge.current.value = "";
+    inputEmail.current.value = "";
+
+    getUsers(); // chama a função para atualizar a lista de usuários
+  }
+
+  async function deleteUser(id) {
+    await api.delete(`/usuarios/${id}`); // chama a API para deletar o usuário com o ID fornecido
+    getUsers(); // atualiza a lista de usuários após a exclusão
+  }
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <div className="w-screen min-h-screen bg-slate-500 flex justify-center items-start p-6 overflow-auto">
@@ -34,24 +53,28 @@ function Home() {
             <input
               name="nome"
               type="text"
+              ref={inputName} // pega a referência do input
               placeholder="Nome"
               className="border border-slate-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
             />
             <input
               name="idade"
               type="number"
+              ref={inputAge}
               placeholder="Idade"
               className="border border-slate-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
             />
             <input
               name="email"
               type="email"
+              ref={inputEmail}
               placeholder="E-mail"
               className="border border-slate-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400"
             />
             <button
               type="button"
               className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
+              onClick={createUsers} // chama a função para criar o usuário
             >
               Cadastrar
             </button>
@@ -83,7 +106,10 @@ function Home() {
                     <strong>E-mail:</strong> {user.email}
                   </p>
                 </div>
-                <button className="bg-slate-700 text-white rounded p-2 hover:bg-slate-800 transition">
+                <button
+                  onClick={() => deleteUser(user.id)}
+                  className="bg-slate-700 text-white rounded p-2 hover:bg-slate-800 transition"
+                >
                   <Trash2 />
                 </button>
               </div>

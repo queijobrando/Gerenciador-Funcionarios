@@ -5,6 +5,7 @@ import com.usuarios.cadastro.Cadastro.Usuarios.api.dto.UsuarioNovoDto;
 import com.usuarios.cadastro.Cadastro.Usuarios.api.mapper.UsuarioMapper;
 import com.usuarios.cadastro.Cadastro.Usuarios.domain.model.Usuario;
 import com.usuarios.cadastro.Cadastro.Usuarios.infra.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,13 @@ public class UsuarioService {
         List<Usuario> lista = usuarioRepository.findAll();
 
         return lista.stream().map(usuarioMapper::toDto).toList();
+    }
+
+    @Transactional
+    public void deleteUsuario(Long id){
+        usuarioRepository.delete(usuarioRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Usuario não encontrado")
+        ));
     }
 
 }
