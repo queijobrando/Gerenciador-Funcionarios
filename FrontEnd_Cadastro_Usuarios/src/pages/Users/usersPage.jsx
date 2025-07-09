@@ -7,6 +7,8 @@ import UserInfo from "../../components/UserInfo";
 function UsersPage() {
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const navigate = useNavigate();
 
   async function getUsers() {
@@ -21,7 +23,7 @@ function UsersPage() {
 
   useEffect(() => {
     getUsers();
-  }, []);
+  }, []); 
 
   return (
     <div className="p-8">
@@ -37,9 +39,40 @@ function UsersPage() {
       </button>
       <UsersList
         users={users}
-        deleteUser={deleteUser}
+        setConfirmDelete={setConfirmDelete}
+        setUserIdToDelete={setUserIdToDelete}
         onInfo={setSelectedUserId}
-      />
+      /> 
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-current/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded shadow-lg p-8 min-w-[300px] relative">
+            <h2 className="text-2xl font-bold mb-6 text-center text-slate-700">
+              Confirmar Exclusão
+            </h2>
+            <p className="text-slate-600 mb-6">
+              Tem certeza que deseja excluir este usuário?
+            </p>
+            <div className="flex justify-center gap-4"> 
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="bg-gray-300 text-gray-800 font-semibold rounded px-4 py-2 hover:bg-gray-400 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  deleteUser(userIdToDelete);
+                  setConfirmDelete(false);
+                  setUserIdToDelete(null);
+                }}
+                className="bg-red-600 text-white font-semibold rounded px-4 py-2 hover:bg-red-700 transition"
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+        )}
 
       {selectedUserId && (
         <div className="fixed inset-0 bg-current/50 flex items-center justify-center z-50">

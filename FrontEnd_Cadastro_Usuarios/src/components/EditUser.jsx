@@ -1,30 +1,36 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../../services/api";
 
-function Form({
-  onSubmit,
-  initialFields = { nome: "", idade: "", email: "" },
-  submitLabel = "Cadastrar",
-}) {
+function EditUser() {
   const [step, setStep] = useState(1);
-  const [fields, setFields] = useState(initialFields);
+  const [fields, setFields] = useState({
+    nome: "",
+    idade: "",
+    email: "",
+  });
   const [errors, setErrors] = useState({
     nome: false,
     idade: false,
     email: false,
   });
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  // Só atualiza os campos se initialFields mudar E não for o objeto vazio padrão
+  // Busca os dados do usuário ao montar
   useEffect(() => {
-    // Só atualiza se for edição (campos preenchidos)
-    if (
-      initialFields.nome !== "" ||
-      initialFields.idade !== "" ||
-      initialFields.email !== ""
-    ) {
-      setFields(initialFields);
+    async function fetchUser() {
+      const { data } = await api.get(`/usuarios/${id}`);
+      setFields({
+        nome: data.nome || "",
+        idade: data.idade || "",
+        email: data.email || "",
+      });
+      setLoading(false);
     }
-    // eslint-disable-next-line
-  }, [initialFields.nome, initialFields.idade, initialFields.email]);
+    fetchUser();
+  }, [id]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -44,7 +50,7 @@ function Form({
   function handleNextStep(e) {
     e.preventDefault();
     const nomeErro = !fields.nome.trim();
-    const idadeErro = !fields.idade;
+    const idadeErro = !fields.idade.trim();
     setErrors((prev) => ({
       ...prev,
       nome: nomeErro,
@@ -55,7 +61,7 @@ function Form({
     }
   }
 
-  function handleSubmit(e) {
+  async function handleUpdate(e) {
     e.preventDefault();
     const emailErro = !fields.email.trim();
     setErrors((prev) => ({
@@ -63,25 +69,21 @@ function Form({
       email: emailErro,
     }));
     if (emailErro) return;
-    onSubmit(fields);
-    setFields({ nome: "", idade: "", email: "" });
-    setStep(1);
-    setErrors({ nome: false, idade: false, email: false });
+    await api.put(`/usuarios/edit/${id}`, fields);
+    navigate("/users");
   }
 
   function inputClass(error) {
-    return `border ${
-      error ? "border-red-500" : "border-slate-300"
-    } rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400`;
+    return `border ${error ? "border-red-500" : "border-slate-300"} rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400`;
   }
 
   function errorMessage(error) {
-    return (
-      error && (
-        <span className="text-red-500 text-xs mt-1">Campo Obrigatório</span>
-      )
+    return error && (
+      <span className="text-red-500 text-xs mt-1">Campo Obrigatório</span>
     );
   }
+
+  if (loading) return <div className="p-8">Carregando...</div>;
 
   return (
     <form className="flex flex-col gap-6 p-6 bg-white rounded max-w-md">
@@ -139,10 +141,10 @@ function Form({
         ) : (
           <button
             type="button"
-            onClick={handleSubmit}
+            onClick={handleUpdate}
             className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
           >
-            {submitLabel}
+            Salvar
           </button>
         )}
       </div>
@@ -150,4 +152,4 @@ function Form({
   );
 }
 
-export default Form;
+export default EditUser;

@@ -27,6 +27,16 @@ public class UsuarioService {
         return usuarioMapper.toDto(usuario);
     }
 
+    public UsuarioInfoDto editUsuario(UsuarioNovoDto dto, Long id){
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        usuarioMapper.updateEntityFromDto(dto, usuario);
+        usuarioRepository.save(usuario);
+
+        return usuarioMapper.toDto(usuario);
+    }
+
     public List<UsuarioInfoDto> getAll(){
         List<Usuario> lista = usuarioRepository.findAll();
 

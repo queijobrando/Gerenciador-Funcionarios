@@ -1,7 +1,7 @@
 import "../index.css";
 import { Info, Trash2 } from "lucide-react";
 
-function UsersList({ users, deleteUser, onInfo }) {
+function UsersList({ users, setConfirmDelete, onInfo, setUserIdToDelete }) {
   return (
     <div className="mt-6">
       {users.length === 0 ? (
@@ -35,7 +35,10 @@ function UsersList({ users, deleteUser, onInfo }) {
                         <Info />
                       </button>
                       <button
-                        onClick={() => deleteUser(user.id)}
+                        onClick={() => {
+                          setUserIdToDelete(user.id);
+                          setConfirmDelete(true);
+                        }}
                         className="bg-slate-700 text-white rounded p-2 cursor-pointer hover:bg-slate-800 transition"
                         title="Excluir"
                       >

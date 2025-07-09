@@ -38,6 +38,13 @@ public class UsuarioController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("edit/{id}")
+    public ResponseEntity<UsuarioInfoDto> editUsuario(@PathVariable Long id,
+                                                      @RequestBody @Valid UsuarioNovoDto dto){
+        return ResponseEntity.ok(usuarioService.editUsuario(dto, id));
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUsuario(@PathVariable Long id){
         usuarioService.deleteUsuario(id);
