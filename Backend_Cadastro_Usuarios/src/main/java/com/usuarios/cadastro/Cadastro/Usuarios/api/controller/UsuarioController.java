@@ -3,6 +3,7 @@ package com.usuarios.cadastro.Cadastro.Usuarios.api.controller;
 import com.usuarios.cadastro.Cadastro.Usuarios.api.dto.UsuarioInfoDto;
 import com.usuarios.cadastro.Cadastro.Usuarios.api.dto.UsuarioNovoDto;
 import com.usuarios.cadastro.Cadastro.Usuarios.domain.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class UsuarioController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    public ResponseEntity<UsuarioInfoDto> novoUsuario(@RequestBody UsuarioNovoDto dto){
+    public ResponseEntity<UsuarioInfoDto> novoUsuario(@Valid @RequestBody UsuarioNovoDto dto){
         UsuarioInfoDto usuario = usuarioService.addUsuario(dto);
 
         return ResponseEntity.ok(usuario);
