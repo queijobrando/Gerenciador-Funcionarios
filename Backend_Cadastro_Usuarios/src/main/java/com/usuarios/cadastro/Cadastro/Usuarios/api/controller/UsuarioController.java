@@ -25,6 +25,12 @@ public class UsuarioController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioInfoDto> getUsuario(@PathVariable Long id){
+        return ResponseEntity.ok(usuarioService.getUsuario(id));
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<List<UsuarioInfoDto>> getAll(){
         return ResponseEntity.ok(usuarioService.getAll());

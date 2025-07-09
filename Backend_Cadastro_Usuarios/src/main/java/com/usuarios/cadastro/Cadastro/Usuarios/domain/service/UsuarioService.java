@@ -33,6 +33,14 @@ public class UsuarioService {
         return lista.stream().map(usuarioMapper::toDto).toList();
     }
 
+    public UsuarioInfoDto getUsuario(Long id){
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Usuario não encontrado")
+        );
+
+        return usuarioMapper.toDto(usuario);
+    }
+
     @Transactional
     public void deleteUsuario(Long id){
         usuarioRepository.delete(usuarioRepository.findById(id).orElseThrow(
