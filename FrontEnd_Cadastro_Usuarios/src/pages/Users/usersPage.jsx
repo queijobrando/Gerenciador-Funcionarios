@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Users } from "lucide-react";
 import api from "../../services/api";
 import UsersList from "../../components/Users";
 import UserInfo from "../../components/UserInfo";
@@ -28,7 +29,7 @@ function UsersPage() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-2">
-        <h1 className="text-3xl font-bold text-slate-700">Lista de Usuários</h1>
+        <h1 className="text-3xl font-bold text-slate-700">Lista de Usuários <Users className="inline mr-2" /></h1>
       </div>
       <hr className="border-slate-300 mb-6" />
       <button

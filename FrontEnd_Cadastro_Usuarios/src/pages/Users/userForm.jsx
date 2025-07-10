@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { UserPlus } from "lucide-react";
 import api from "../../services/api";
 import Form from "../../components/Form";
 
@@ -12,7 +13,7 @@ function UserForm() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold text-slate-700 mb-2">Novo Usuário</h1>
+      <h1 className="text-3xl font-bold text-slate-700 mb-2">Novo Usuário <UserPlus className="inline mr-2"/></h1>
       <hr className="border-slate-300 mb-6" />
       <Form onSubmit={createUsers} submitLabel="Cadastrar" />
     </div>

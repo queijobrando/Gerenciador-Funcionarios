@@ -53,7 +53,7 @@ function UserInfo({ id, back }) {
           </span>
         </div>
       </div>
-      <div className="flex justify-end mt-8 pr-2">
+      <div className="flex justify-end mt-8 pr-2 gap-2">
         <button
           onClick={() => navigate(`/users/edit/${id}`)}
           className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
@@ -62,7 +62,7 @@ function UserInfo({ id, back }) {
         </button>
         <button
           onClick={() => back(null)}
-          className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
+          className="bg-gray-300 text-gray-800 font-semibold rounded px-4 py-2 hover:bg-gray-400 transition"
         >
           Voltar
         </button>

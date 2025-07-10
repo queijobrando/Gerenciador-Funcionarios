@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import TestePage from "./pages/testePage";
 import Sidebar from "./components/Sidebar";
 import UsersPage from "./pages/Users/usersPage";
-import UserForm from "./pages/Users/userForm";
+import UserForm from "./pages/Users/UserForm";
 import UserEditPage from "./pages/Users/userEdit";
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import Login from './pages/Home/login';
 
 function App() {
   return (
@@ -12,11 +13,27 @@ function App() {
       <Sidebar />
       <div className="ml-56">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/users/form" element={<UserForm />} />
-          <Route path="/users/edit/:id" element={<UserEditPage />} />
-          <Route path="/teste" element={<TestePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+            } />
+            <Route path="/users" element={
+            <ProtectedRoute>
+              <UsersPage />
+            </ProtectedRoute>
+            } />
+            <Route path="/users/form" element={
+            <ProtectedRoute>
+              <UserForm />
+            </ProtectedRoute>
+            } />
+            <Route path="/users/edit/:id" element={
+            <ProtectedRoute>
+              <UserEditPage />
+            </ProtectedRoute>
+            } />
         </Routes>
       </div>
     </BrowserRouter>
