@@ -20,10 +20,9 @@ const Login = () => {
       return;
     }
     setLoading(true);
-    console.log(credentials)
     try {
       await login(credentials);
-      navigate('/'); // ou para a rota protegida desejada
+      navigate('/'); 
     } catch {
       setError('Usuário ou senha inválidos');
     } finally {
@@ -32,35 +31,44 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <form onSubmit={handleSubmit} style={{ background: '#fff', padding: 32, borderRadius: 8, boxShadow: '0 2px 8px #0001', minWidth: 320 }}>
-        <h2>Login</h2>
-        <div style={{ marginBottom: 16 }}>
-          <label>Usuário</label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-1">Usuário</label>
           <input
             type="text"
             name="username"
             value={credentials.username}
             onChange={handleChange}
-            style={{ width: '100%', padding: 8, marginTop: 4 }}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
             autoComplete="username"
             disabled={loading}
           />
         </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>Senha</label>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-1">Senha</label>
           <input
             type="password"
             name="password"
             value={credentials.password}
             onChange={handleChange}
-            style={{ width: '100%', padding: 8, marginTop: 4 }}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
             autoComplete="current-password"
             disabled={loading}
           />
         </div>
-        {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
+        {error && (
+          <div className="text-red-600 mb-3 text-sm text-center">{error}</div>
+        )}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-2 bg-slate-700 text-white font-semibold rounded hover:bg-slate-800 transition-colors disabled:opacity-60"
+        >
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>

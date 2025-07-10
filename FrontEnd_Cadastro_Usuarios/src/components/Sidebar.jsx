@@ -1,15 +1,37 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Users, ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import {
+  Home,
+  Users,
+  ChevronDown,
+  ChevronUp,
+  LogOut,
+  CircleUserRound,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { logout, getDecodedToken } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [openUsers, setOpenUsers] = useState(false);
+  const [userName, setUserName] = useState();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const decodedToken = getDecodedToken();
+    setUserName(decodedToken.sub || "Usuário");
+  }, []);
 
   return (
     <aside className="fixed left-0 top-0 h-full w-56 bg-slate-800 text-white flex flex-col shadow-lg z-20">
       <div className="p-6 text-2xl font-bold border-b border-slate-700 mb-4">
-        Meu Menu
+        <Link
+          to="/profile"
+          className="flex gap-2 items-center cursor-pointer hover:underline"
+        >
+          <CircleUserRound />
+          {userName}
+        </Link>
       </div>
       <nav className="flex-1 flex flex-col gap-2 px-4">
         <Link
@@ -53,6 +75,17 @@ function Sidebar() {
           </div>
         )}
       </nav>
+      <div className="mt-auto px-4 pb-6">
+        <button
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
+          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded bg-slate-700 hover:bg-slate-600 transition font-semibold"
+        >
+          Logout <LogOut size={18} />
+        </button>
+      </div>
     </aside>
   );
 }
