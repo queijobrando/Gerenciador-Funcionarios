@@ -1,9 +1,8 @@
 import api from './api';
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 export const login = async (credentials) => {
-  const response = await axios.post(`${api}/login`, credentials);
+  const response = await api.post("/login", credentials);
   const token = response.data.token;
   localStorage.setItem('token', token);
   return token;

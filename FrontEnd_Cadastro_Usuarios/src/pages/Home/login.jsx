@@ -20,6 +20,7 @@ const Login = () => {
       return;
     }
     setLoading(true);
+    console.log(credentials)
     try {
       await login(credentials);
       navigate('/'); // ou para a rota protegida desejada
