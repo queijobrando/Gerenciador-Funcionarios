@@ -5,6 +5,7 @@ import EmployersPage from "./pages/Employers/employersPage";
 import EmployerForm from "./pages/Employers/employerForm";
 import EmployerEditPage from "./pages/Employers/employerEdit";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import CompanyFormPage from "./pages/Company/companyFormPage";
 import Login from "./pages/Home/login";
 import Profile from "./pages/User/profile";
 
@@ -13,6 +14,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/create-company"
+          element={
+            <ProtectedRoute>
+              <CompanyFormPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="*"
           element={
@@ -58,7 +67,7 @@ function App() {
                       <ProtectedRoute>
                         <Profile />
                       </ProtectedRoute>
-                    } 
+                    }
                   />
                 </Routes>
               </div>

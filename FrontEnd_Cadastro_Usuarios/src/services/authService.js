@@ -8,6 +8,16 @@ export const login = async (credentials) => {
   return token;
 };
 
+export const userInfo = async() => {
+  try {
+    const response = await api.get("/user");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar informações do usuário:", error);
+    return null;
+  }
+}
+
 export const logout = () => {
   localStorage.removeItem('token');
 };

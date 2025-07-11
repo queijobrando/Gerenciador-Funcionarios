@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { User as UserIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/misc/Loading";
 
