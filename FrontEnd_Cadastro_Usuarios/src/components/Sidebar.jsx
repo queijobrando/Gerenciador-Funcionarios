@@ -12,7 +12,7 @@ import { logout, getDecodedToken } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
-  const [openUsers, setOpenUsers] = useState(false);
+  const [openEmployers, setOpenEmployers] = useState(false);
   const [userName, setUserName] = useState();
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,34 +43,34 @@ function Sidebar() {
         </Link>
         {/* Usuários com submenu */}
         <button
-          onClick={() => setOpenUsers((prev) => !prev)}
+          onClick={() => setOpenEmployers((prev) => !prev)}
           className="py-2 px-3 rounded hover:bg-slate-700 transition flex items-center w-full text-left"
         >
           <Users className="inline mr-2" />
-          Usuários
-          {openUsers ? (
+          Funcionários
+          {openEmployers ? (
             <ChevronUp className="ml-auto" size={18} />
           ) : (
             <ChevronDown className="ml-auto" size={18} />
           )}
         </button>
-        {openUsers && (
+        {openEmployers && (
           <div className="ml-7 flex flex-col gap-1">
             <Link
-              to="/users"
+              to="/employers"
               className={`py-1 px-2 rounded hover:bg-slate-700 transition ${
-                location.pathname === "/users" ? "bg-slate-700" : ""
+                location.pathname === "/employers" ? "bg-slate-700" : ""
               }`} // pra deixar cinza quando estiver na rota
             >
-              Todos Usuários
+              Todos Funcionários
             </Link>
             <Link
-              to="/users/form"
+              to="/employers/form"
               className={`py-1 px-2 rounded hover:bg-slate-700 transition ${
-                location.pathname === "/users/form" ? "bg-slate-700" : ""
+                location.pathname === "/employers/form" ? "bg-slate-700" : ""
               }`}
             >
-              Novo Usuário
+              Novo Funcionário
             </Link>
           </div>
         )}

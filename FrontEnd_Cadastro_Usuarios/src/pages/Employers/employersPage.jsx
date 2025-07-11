@@ -2,47 +2,47 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
 import api from "../../services/api";
-import UsersList from "../../components/Users";
-import UserInfo from "../../components/UserInfo";
+import EmployersList from "../../components/Employers";
+import EmployerInfo from "../../components/EmployerInfo";
 
-function UsersPage() {
-  const [users, setUsers] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [userIdToDelete, setUserIdToDelete] = useState(null);
+function EmployersPage() {
+  const [employers, setEmployers] = useState([]);
+  const [selectedEmployerId, setSelectedEmployerId] = useState(null);
+  const [employerIdToDelete, setEmployerIdToDelete] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const navigate = useNavigate();
 
-  async function getUsers() {
-    const usersFromApi = await api.get("/usuarios");
-    setUsers(usersFromApi.data);
+  async function getEmployers() {
+    const usersFromApi = await api.get("/employers");
+    setEmployers(usersFromApi.data);
   }
 
-  async function deleteUser(id) {
-    await api.delete(`/usuarios/${id}`);
-    getUsers();
+  async function deleteEmployer(id) {
+    await api.delete(`/employers/${id}`);
+    getEmployers();
   }
 
   useEffect(() => {
-    getUsers();
+    getEmployers();
   }, []); 
 
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-2">
-        <h1 className="text-3xl font-bold text-slate-700">Lista de Usuários <Users className="inline mr-2" /></h1>
+        <h1 className="text-3xl font-bold text-slate-700">Lista de Funcionários <Users className="inline mr-2" /></h1>
       </div>
       <hr className="border-slate-300 mb-6" />
       <button
-        onClick={() => navigate("/users/form")}
+        onClick={() => navigate("/employers/form")}
         className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
       >
         Novo
       </button>
-      <UsersList
-        users={users}
+      <EmployersList
+        employers={employers}
         setConfirmDelete={setConfirmDelete}
-        setUserIdToDelete={setUserIdToDelete}
-        onInfo={setSelectedUserId}
+        setEmployerIdToDelete={setEmployerIdToDelete}
+        onInfo={setSelectedEmployerId}
       /> 
       {confirmDelete && (
         <div className="fixed inset-0 bg-current/50 flex items-center justify-center z-50">
@@ -51,7 +51,7 @@ function UsersPage() {
               Confirmar Exclusão
             </h2>
             <p className="text-slate-600 mb-6">
-              Tem certeza que deseja excluir este usuário?
+              Tem certeza que deseja excluir este funcionário?
             </p>
             <div className="flex justify-center gap-4"> 
               <button
@@ -62,9 +62,9 @@ function UsersPage() {
               </button>
               <button
                 onClick={() => {
-                  deleteUser(userIdToDelete);
+                  deleteEmployer(employerIdToDelete);
                   setConfirmDelete(false);
-                  setUserIdToDelete(null);
+                  setEmployerIdToDelete(null);
                 }}
                 className="bg-red-600 text-white font-semibold rounded px-4 py-2 hover:bg-red-700 transition"
               >
@@ -75,10 +75,10 @@ function UsersPage() {
         </div>
         )}
 
-      {selectedUserId && (
+      {selectedEmployerId && (
         <div className="fixed inset-0 bg-current/50 flex items-center justify-center z-50">
           <div className="bg-white rounded shadow-lg p-8 min-w-[300px] relative">
-            <UserInfo id={selectedUserId} back={setSelectedUserId} />
+            <EmployerInfo id={selectedEmployerId} back={setSelectedEmployerId} />
           </div>
         </div>
       )}
@@ -86,4 +86,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
+export default EmployersPage;

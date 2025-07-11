@@ -2,30 +2,30 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-function UserInfo({ id, back }) {
-  const [user, setUser] = useState(null);
+function EmployerInfo({ id, back }) {
+  const [employer, setEmployer] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchUser() {
+    async function fetchEmployer() {
       try {
-        const res = await api.get(`/usuarios/${id}`);
-        setUser(res.data);
+        const res = await api.get(`/employers/${id}`);
+        setEmployer(res.data);
       } catch (error) {
-        console.error("Erro ao buscar usuário:", error);
-        setUser({ erro: "Não foi possível carregar os dados." });
+        console.error("Erro ao buscar funcionário:", error);
+        setEmployer({ erro: "Não foi possível carregar os dados." });
       }
     }
-    fetchUser();
+    fetchEmployer();
   }, [id]);
 
-  if (!user) return <div>Carregando...</div>;
-  if (user.erro) return <div>{user.erro}</div>;
+  if (!employer) return <div>Carregando...</div>;
+  if (employer.erro) return <div>{employer.erro}</div>;
 
   return (
     <div className="w-full max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center text-slate-700">
-        Informações do Usuário
+        Informações do Funcionário
       </h2>
       <div className="grid grid-cols-3 gap-4">
         <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
@@ -33,7 +33,7 @@ function UserInfo({ id, back }) {
             Nome
           </span>
           <span className="block text-lg text-slate-800 break-words min-w-0">
-            {user.nome}
+            {employer.nome}
           </span>
         </div>
         <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
@@ -41,7 +41,7 @@ function UserInfo({ id, back }) {
             Idade
           </span>
           <span className="block text-lg text-slate-800 break-words min-w-0">
-            {user.idade}
+            {employer.idade}
           </span>
         </div>
         <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
@@ -49,13 +49,13 @@ function UserInfo({ id, back }) {
             Email
           </span>
           <span className="block text-lg text-slate-800 break-words min-w-0">
-            {user.email}
+            {employer.email}
           </span>
         </div>
       </div>
       <div className="flex justify-end mt-8 pr-2 gap-2">
         <button
-          onClick={() => navigate(`/users/edit/${id}`)}
+          onClick={() => navigate(`/employers/edit/${id}`)}
           className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
         >
           Editar
@@ -71,4 +71,4 @@ function UserInfo({ id, back }) {
   );
 }
 
-export default UserInfo;
+export default EmployerInfo;

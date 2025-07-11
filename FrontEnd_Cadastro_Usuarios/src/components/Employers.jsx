@@ -1,12 +1,12 @@
 import "../index.css";
 import { Info, Trash2 } from "lucide-react";
 
-function UsersList({ users, setConfirmDelete, onInfo, setUserIdToDelete }) {
+function EmployersList({ employers, setConfirmDelete, onInfo, setEmployerIdToDelete }) {
   return (
     <div className="mt-6">
-      {users.length === 0 ? (
+      {employers.length === 0 ? (
         <div className="text-slate-400 text-center">
-          Nenhum usuário cadastrado ainda.
+          Nenhum funcionário cadastrado ainda.
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -20,15 +20,15 @@ function UsersList({ users, setConfirmDelete, onInfo, setUserIdToDelete }) {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className="border-t border-slate-200">
-                  <td className="px-4 py-2">{user.nome}</td>
-                  <td className="px-4 py-2">{user.idade}</td>
-                  <td className="px-4 py-2">{user.email}</td>
+              {employers.map((employers) => (
+                <tr key={employers.id} className="border-t border-slate-200">
+                  <td className="px-4 py-2">{employers.nome}</td>
+                  <td className="px-4 py-2">{employers.idade}</td>
+                  <td className="px-4 py-2">{employers.email}</td>
                   <td className="px-4 py-2">
                     <div className="flex gap-2">
                       <button
-                        onClick={() => onInfo(user.id)}
+                        onClick={() => onInfo(employers.id)}
                         className="bg-slate-500 text-white rounded p-2 cursor-pointer hover:bg-slate-600 transition"
                         title="Informações"
                       >
@@ -36,7 +36,7 @@ function UsersList({ users, setConfirmDelete, onInfo, setUserIdToDelete }) {
                       </button>
                       <button
                         onClick={() => {
-                          setUserIdToDelete(user.id);
+                          setEmployerIdToDelete(employers.id);
                           setConfirmDelete(true);
                         }}
                         className="bg-slate-700 text-white rounded p-2 cursor-pointer hover:bg-slate-800 transition"
@@ -56,4 +56,4 @@ function UsersList({ users, setConfirmDelete, onInfo, setUserIdToDelete }) {
   );
 }
 
-export default UsersList;
+export default EmployersList;

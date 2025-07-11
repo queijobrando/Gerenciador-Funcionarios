@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
-import UsersPage from "./pages/Users/usersPage";
-import UserForm from "./pages/Users/UserForm";
-import UserEditPage from "./pages/Users/userEdit";
+import EmployersPage from "./pages/Employers/employersPage";
+import EmployerForm from "./pages/Employers/employerForm";
+import EmployerEditPage from "./pages/Employers/employerEdit";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Login from "./pages/Home/login";
 import Profile from "./pages/User/profile";
@@ -29,26 +29,26 @@ function App() {
                     }
                   />
                   <Route
-                    path="/users"
+                    path="/employers"
                     element={
                       <ProtectedRoute>
-                        <UsersPage />
+                        <EmployersPage />
                       </ProtectedRoute>
                     }
                   />
                   <Route
-                    path="/users/form"
+                    path="/employers/form"
                     element={
                       <ProtectedRoute>
-                        <UserForm />
+                        <EmployerForm />
                       </ProtectedRoute>
                     }
                   />
                   <Route
-                    path="/users/edit/:id"
+                    path="/employers/edit/:id"
                     element={
                       <ProtectedRoute>
-                        <UserEditPage />
+                        <EmployerEditPage />
                       </ProtectedRoute>
                     }
                   />
