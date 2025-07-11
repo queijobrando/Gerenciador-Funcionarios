@@ -18,12 +18,13 @@ function CompanyFormPage() {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-slate-700 mb-2">Criar Empresa</h1>
-      <hr className="border-slate-300 mb-6" />
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="w-full max-w-2xl bg-white p-10 rounded shadow-md">
+      <h1 className="text-3xl font-bold text-slate-700 mb-4 text-center">Criar Empresa</h1>
       <CompanyForm onSubmit={createCompany} />
     </div>
-  );
+  </div>
+);
 }
 
 export default CompanyFormPage;

@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+.input-style {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #f1f5f9; /* bg-slate-100 */
+  border: 1px solid #cbd5e1; /* border-slate-300 */
+  color: #1e293b; /* text-slate-800 */
+}
+.input-style:focus {
+  outline: none;
+  border-color: #64748b; /* border-slate-500 */
+  background-color: #e2e8f0;
+}
