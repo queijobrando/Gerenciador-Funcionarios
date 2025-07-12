@@ -8,7 +8,7 @@ function CompanyFormPage() {
 
   async function createCompany(data) {
     try {
-      const response = await api.post("/company/register", data);
+      await api.post("/company/register", data);
       toast.success("Empresa criada com sucesso!");
       navigate("/"); 
     } catch (error) {

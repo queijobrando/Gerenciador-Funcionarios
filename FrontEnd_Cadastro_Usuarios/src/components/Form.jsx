@@ -1,152 +1,298 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AnimatePresence, motion } from "framer-motion";
+import { Building2, MapPin } from "lucide-react";
 
-function Form({
-  onSubmit,
-  initialFields = { nome: "", idade: "", email: "" },
-  submitLabel = "Cadastrar",
-}) {
+function Form({ onSubmit }) {
   const [step, setStep] = useState(1);
-  const [fields, setFields] = useState(initialFields);
-  const [errors, setErrors] = useState({
-    nome: false,
-    idade: false,
-    email: false,
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    trigger,
+    getValues,
+  } = useForm({
+    shouldUnregister: false,
   });
 
-  // Só atualiza os campos se initialFields mudar E não for o objeto vazio padrão
-  useEffect(() => {
-    // Só atualiza se for edição (campos preenchidos)
-    if (
-      initialFields.nome !== "" ||
-      initialFields.idade !== "" ||
-      initialFields.email !== ""
-    ) {
-      setFields(initialFields);
-    }
-    // eslint-disable-next-line
-  }, [initialFields.nome, initialFields.idade, initialFields.email]);
+  const handleNext = async () => {
+    const isValid = await trigger([
+      "name",
+      "birthdate",
+      "hiredate",
+      "cpf",
+      "email",
+      "contact",
+    ]);
+    if (isValid) setStep(2);
+  };
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFields((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
+  const handleBack = () => setStep(1);
 
-  function handleBlur(field, value) {
-    setErrors((prev) => ({
-      ...prev,
-      [field]: !value.trim(),
-    }));
-  }
-
-  function handleNextStep(e) {
-    e.preventDefault();
-    const nomeErro = !fields.nome.trim();
-    const idadeErro = !fields.idade;
-    setErrors((prev) => ({
-      ...prev,
-      nome: nomeErro,
-      idade: idadeErro,
-    }));
-    if (!nomeErro && !idadeErro) {
-      setStep(2);
-    }
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const emailErro = !fields.email.trim();
-    setErrors((prev) => ({
-      ...prev,
-      email: emailErro,
-    }));
-    if (emailErro) return;
-    onSubmit(fields);
-    setFields({ nome: "", idade: "", email: "" });
-    setStep(1);
-    setErrors({ nome: false, idade: false, email: false });
-  }
-
-  function inputClass(error) {
-    return `border ${
-      error ? "border-red-500" : "border-slate-300"
-    } rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400`;
-  }
-
-  function errorMessage(error) {
-    return (
-      error && (
-        <span className="text-red-500 text-xs mt-1">Campo Obrigatório</span>
-      )
-    );
-  }
+  const submitFinal = () => {
+    const data = getValues();
+    onSubmit(data);
+  };
 
   return (
-    <form className="flex flex-col gap-6 p-6 bg-white rounded max-w-md">
-      {step === 1 && (
-        <div className="flex gap-4">
-          <div className="flex flex-col flex-1">
-            <input
-              type="text"
-              name="nome"
-              value={fields.nome}
-              onChange={handleChange}
-              onBlur={(e) => handleBlur("nome", e.target.value)}
-              placeholder="Nome"
-              className={inputClass(errors.nome)}
-            />
-            {errorMessage(errors.nome)}
-          </div>
-          <div className="flex flex-col w-32">
-            <input
-              type="number"
-              name="idade"
-              value={fields.idade}
-              onChange={handleChange}
-              onBlur={(e) => handleBlur("idade", e.target.value)}
-              placeholder="Idade"
-              className={inputClass(errors.idade)}
-            />
-            {errorMessage(errors.idade)}
-          </div>
+    <div>
+      {/* Barra de etapas */}
+      <div className="flex justify-between mb-6">
+        <div
+          className={`flex items-center gap-2 ${
+            step >= 1
+              ? "px-4 py-2 rounded-3xl text-white font-medium bg-slate-700 transition"
+              : "text-gray-400"
+          }`}
+        >
+          <Building2 className="w-5 h-5" />
+          <span>Dados</span>
         </div>
-      )}
-      {step === 2 && (
-        <div className="flex flex-col gap-4">
-          <input
-            type="email"
-            name="email"
-            value={fields.email}
-            onChange={handleChange}
-            onBlur={(e) => handleBlur("email", e.target.value)}
-            placeholder="Email"
-            className={inputClass(errors.email)}
-          />
-          {errorMessage(errors.email)}
+        <div
+          className={`flex items-center gap-2 ${
+            step >= 2
+              ? "px-4 py-2 rounded-3xl text-white font-medium bg-slate-700 transition"
+              : "text-gray-400"
+          }`}
+        >
+          <MapPin className="w-5 h-5" />
+          <span>Endereço</span>
         </div>
-      )}
-      <div className="flex justify-end">
-        {step === 1 ? (
-          <button
-            type="button"
-            onClick={handleNextStep}
-            className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
-          >
-            Próxima etapa
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="bg-slate-700 text-white font-semibold rounded px-4 py-2 hover:bg-slate-800 transition"
-          >
-            {submitLabel}
-          </button>
-        )}
       </div>
-    </form>
+
+      <form onSubmit={handleSubmit(submitFinal)} className="min-h-[350px]">
+        <AnimatePresence mode="wait" initial={false}>
+          {step === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 30 }}
+              transition={{ duration: 0.25 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              <div>
+                <input
+                  {...register("name", {
+                    required: "Nome Completo é obrigatório",
+                  })}
+                  placeholder="Nome Completo"
+                  className="input-style"
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("birthdate", {
+                    required: "Data de Nascimento é obrigatória",
+                  })}
+                  placeholder="Data de Nascimento"
+                  className="input-style"
+                />
+                {errors.birthdate && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.birthdate.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("hiredate", {
+                    required: "Data de Admissão é obrigatória",
+                  })}
+                  placeholder="Data de Admissão"
+                  className="input-style"
+                />
+                {errors.hiredate && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.hiredate.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("cpf", { required: "CPF é obrigatório" })}
+                  placeholder="CPF"
+                  className="input-style"
+                />
+                {errors.cpf && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.cpf.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("email", { required: "E-mail é obrigatório" })}
+                  type="email"
+                  placeholder="E-mail"
+                  className="input-style"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("contact", {
+                    required: "Telefone de contato é obrigatório",
+                  })}
+                  placeholder="Telefone"
+                  className="input-style"
+                />
+                {errors.contact && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.contact.message}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {step === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.25 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              <div>
+                <input
+                  {...register("logradouro", {
+                    required: "Logradouro é obrigatório",
+                  })}
+                  placeholder="Logradouro"
+                  className="input-style"
+                />
+                {errors.logradouro && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.logradouro.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("complemento")}
+                  placeholder="Complemento"
+                  className="input-style"
+                />
+              </div>
+
+              <div>
+                <input
+                  {...register("numero", { required: "Número é obrigatório" })}
+                  placeholder="Número"
+                  className="input-style"
+                />
+                {errors.numero && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.numero.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("bairro", { required: "Bairro é obrigatório" })}
+                  placeholder="Bairro"
+                  className="input-style"
+                />
+                {errors.bairro && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.bairro.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("cidade", { required: "Cidade é obrigatória" })}
+                  placeholder="Cidade"
+                  className="input-style"
+                />
+                {errors.cidade && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.cidade.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("estado", { required: "Estado é obrigatório" })}
+                  placeholder="Estado"
+                  className="input-style"
+                />
+                {errors.estado && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.estado.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  {...register("cep", { required: "CEP é obrigatório" })}
+                  placeholder="CEP"
+                  className="input-style"
+                />
+                {errors.cep && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.cep.message}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Botões */}
+        <div className="flex justify-between pt-6">
+          {step > 1 && (
+            <button
+              type="button"
+              onClick={handleBack}
+              className="px-4 py-2 rounded bg-gray-300 text-gray-700 hover:bg-gray-400"
+            >
+              Voltar
+            </button>
+          )}
+
+          {step < 2 ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              className="px-4 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 transition"
+            >
+              Próximo
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-4 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 transition"
+            >
+              {isSubmitting ? "Enviando..." : "Finalizar"}
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }
 
