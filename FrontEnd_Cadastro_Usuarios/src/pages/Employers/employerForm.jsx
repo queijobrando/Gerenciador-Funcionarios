@@ -9,7 +9,7 @@ function EmployerForm() {
 
   async function createEmployer(data) {
     try {
-      await api.post("/employer", data);
+      await api.post("/employer/register", data);
       navigate("/employers");
     } catch (error) {
       console.error("Erro ao criar funcionário:", error);

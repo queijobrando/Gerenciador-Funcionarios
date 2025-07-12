@@ -1,30 +1,33 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../../services/authService';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../services/authService";
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!credentials.username || !credentials.password) {
-      setError('Preencha todos os campos');
+      setError("Preencha todos os campos");
       return;
     }
     setLoading(true);
     try {
       await login(credentials);
-      navigate('/'); 
+      navigate("/");
     } catch {
-      setError('Usuário ou senha inválidos');
+      setError("Usuário ou senha inválidos");
     } finally {
       setLoading(false);
     }
@@ -36,7 +39,9 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          Login
+        </h2>
         <div className="mb-4">
           <label className="block text-gray-700 mb-1">Usuário</label>
           <input
@@ -69,8 +74,17 @@ const Login = () => {
           disabled={loading}
           className="w-full py-2 bg-slate-700 text-white font-semibold rounded hover:bg-slate-800 transition-colors disabled:opacity-60"
         >
-          {loading ? 'Entrando...' : 'Entrar'}
+          {loading ? "Entrando..." : "Entrar"}
         </button>
+        <div className="text-center mt-4 text-sm text-gray-700">
+          Novo por aqui?{" "}
+          <span
+            onClick={() => navigate("/register")}
+            className="text-slate-700 font-semibold hover:underline cursor-pointer"
+          >
+            Registre-se
+          </span>
+        </div>
       </form>
     </div>
   );

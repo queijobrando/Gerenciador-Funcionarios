@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { Building2, MapPin } from "lucide-react";
+import api from "../services/api";
 
 function Form({ onSubmit }) {
   const [step, setStep] = useState(1);
+  const [positions, setPositions] = useState([]);
+
+  useEffect(() => {
+    async function fetchPositions() {
+      try {
+        const response = await api.get("/employer/positions");
+        setPositions(response.data);
+      } catch (err) {
+        console.error("Erro ao carregar os cargos:", err);
+      }
+    }
+
+    fetchPositions();
+  }, []);
 
   const {
     register,
@@ -24,6 +39,7 @@ function Form({ onSubmit }) {
       "cpf",
       "email",
       "contact",
+      "positionId",
     ]);
     if (isValid) setStep(2);
   };
@@ -155,6 +171,29 @@ function Form({ onSubmit }) {
                 {errors.contact && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.contact.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <select
+                  {...register("positionId", {
+                    required: "Cargo é obrigatório",
+                  })}
+                  className="input-style"
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    Selecione o Cargo
+                  </option>
+                  {positions.map((position) => (
+                    <option key={position.id} value={position.id}>
+                      {position.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.positionId && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.positionId.message}
                   </p>
                 )}
               </div>

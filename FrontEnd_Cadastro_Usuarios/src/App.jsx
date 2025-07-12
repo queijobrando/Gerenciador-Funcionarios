@@ -8,12 +8,14 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import CompanyFormPage from "./pages/Company/companyFormPage";
 import Login from "./pages/Home/login";
 import Profile from "./pages/User/profile";
+import RegisterPage from "./pages/Home/registerPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/create-company"
           element={
