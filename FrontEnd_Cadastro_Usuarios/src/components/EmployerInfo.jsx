@@ -9,7 +9,7 @@ function EmployerInfo({ id, back }) {
   useEffect(() => {
     async function fetchEmployer() {
       try {
-        const res = await api.get(`/employers/${id}`);
+        const res = await api.get(`/employer/${id}`);
         setEmployer(res.data);
       } catch (error) {
         console.error("Erro ao buscar funcionário:", error);
@@ -33,7 +33,7 @@ function EmployerInfo({ id, back }) {
             Nome
           </span>
           <span className="block text-lg text-slate-800 break-words min-w-0">
-            {employer.nome}
+            {employer.name}
           </span>
         </div>
         <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
@@ -41,7 +41,7 @@ function EmployerInfo({ id, back }) {
             Idade
           </span>
           <span className="block text-lg text-slate-800 break-words min-w-0">
-            {employer.idade}
+            {employer.birthdate}
           </span>
         </div>
         <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
@@ -50,6 +50,78 @@ function EmployerInfo({ id, back }) {
           </span>
           <span className="block text-lg text-slate-800 break-words min-w-0">
             {employer.email}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Admissão
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.hiredate}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            CPF
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.cpf}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Contato
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.contact}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Logradouro
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.logradouro}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Numero
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.numero}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Numero
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.bairro}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Numero
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.cidade}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            Numero
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.estado}
+          </span>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 bg-slate-50 shadow-sm min-w-0 w-full">
+          <span className="block text-slate-500 text-sm font-semibold mb-1">
+            CEP
+          </span>
+          <span className="block text-lg text-slate-800 break-words min-w-0">
+            {employer.cep}
           </span>
         </div>
       </div>

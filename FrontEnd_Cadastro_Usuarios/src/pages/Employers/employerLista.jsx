@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { User, Briefcase, CheckCircle } from "lucide-react";
+import { User, Briefcase, CheckCircle, Info, Trash2 } from "lucide-react";
+import EmployerInfo from "../../components/EmployerInfo";
 
 // Função para definir a cor do status dinamicamente
 const getStatusStyle = (status) => {
@@ -23,6 +24,9 @@ function EmployerLista() {
   const [pageInfo, setPageInfo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [nameFilter, setNameFilter] = useState("");
+  const [selectedEmployerId, setSelectedEmployerId] = useState(null);
+  const [employerIdToDelete, setEmployerIdToDelete] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const loadEmployers = async (page = 1, name = "") => {
     try {
@@ -40,10 +44,17 @@ function EmployerLista() {
     loadEmployers(currentPage, nameFilter);
   }, [currentPage, nameFilter]);
 
+  async function deleteEmployer(id) {
+    await api.delete(`/employer/${id}`);
+    loadEmployers(currentPage, nameFilter);
+  }
+
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Lista de Funcionários</h2>
-
+      <h1 className="text-3xl font-bold text-slate-700 mb-2">
+        Lista de Funcionários
+      </h1>
+      <hr className="border-slate-300 mb-6" />
       <div className="mb-6">
         <input
           type="text"
@@ -53,15 +64,16 @@ function EmployerLista() {
             setNameFilter(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-64 border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-64 border border-gray-300 p-2 rounded focus:outline-none "
         />
       </div>
 
       {/* Cabeçalhos */}
-      <div className="flex gap-4 mb-2 font-semibold text-gray-700 px-2">
-        <div className="w-1/3">Nome</div>
-        <div className="w-1/3">Cargo</div>
-        <div className="w-1/3">Status</div>
+      <div className="flex gap-4 mb-2 font-semibold text-slate-700 px-2">
+        <div className="w-1/4">Nome</div>
+        <div className="w-1/4">Cargo</div>
+        <div className="w-1/4">Status</div>
+        <div className="w-1/4 text-center">Ações</div>
       </div>
 
       <ul className="space-y-4">
@@ -71,25 +83,46 @@ function EmployerLista() {
             className="p-4 bg-gray-100 rounded-2xl shadow-sm flex gap-4 items-center"
           >
             {/* Nome */}
-            <div className="w-1/3 flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-sm">
+            <div className="w-1/4 flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-sm">
               <User className="w-4 h-4 text-gray-500" />
               <span className="font-medium">{emp.name}</span>
             </div>
 
             {/* Cargo */}
-            <div className="w-1/3 flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-sm">
+            <div className="w-1/4 flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-sm">
               <Briefcase className="w-4 h-4 text-gray-500" />
               <span className="text-sm text-gray-700">{emp.positionName}</span>
             </div>
 
             {/* Status */}
             <div
-              className={`w-1/3 flex items-center gap-2 px-3 py-1 rounded-xl text-sm font-semibold ${getStatusStyle(
+              className={`w-1/4 flex items-center gap-2 px-3 py-1 rounded-xl text-sm font-semibold ${getStatusStyle(
                 emp.employerStatus
               )}`}
             >
               <CheckCircle className="w-4 h-4" />
               {emp.employerStatus}
+            </div>
+
+            {/* Ações */}
+            <div className="w-1/4 flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-sm">
+              <button
+                onClick={() => setSelectedEmployerId(emp.id)}
+                className="bg-slate-700 text-white rounded p-2 cursor-pointer hover:bg-slate-900 transition"
+                title="Informações"
+              >
+                <Info className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => {
+                  setEmployerIdToDelete(emp.id);
+                  setConfirmDelete(true);
+                }}
+                className="bg-red-600 text-white rounded p-2 cursor-pointer hover:bg-red-700 transition"
+                title="Excluir"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
           </li>
         ))}
@@ -118,6 +151,49 @@ function EmployerLista() {
           >
             Próxima
           </button>
+        </div>
+      )}
+
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+          <div className="bg-white rounded shadow-lg p-8 min-w-[300px] relative">
+            <h2 className="text-2xl font-bold mb-6 text-center text-slate-700">
+              Confirmar Exclusão
+            </h2>
+            <p className="text-slate-600 mb-6">
+              Tem certeza que deseja excluir este funcionário?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="bg-gray-300 text-gray-800 font-semibold rounded px-4 py-2 hover:bg-gray-400 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  deleteEmployer(employerIdToDelete);
+                  setConfirmDelete(false);
+                  setEmployerIdToDelete(null);
+                }}
+                className="bg-red-600 text-white font-semibold rounded px-4 py-2 hover:bg-red-700 transition"
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Info */}
+      {selectedEmployerId && (
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+          <div className="bg-white rounded shadow-lg p-8 min-w-[300px] relative">
+            <EmployerInfo
+              id={selectedEmployerId}
+              back={setSelectedEmployerId}
+            />
+          </div>
         </div>
       )}
     </div>
