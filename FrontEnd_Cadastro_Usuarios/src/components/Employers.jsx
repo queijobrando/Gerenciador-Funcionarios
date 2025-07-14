@@ -14,17 +14,17 @@ function EmployersList({ employers, setConfirmDelete, onInfo, setEmployerIdToDel
             <thead>
               <tr className="bg-slate-700 text-white">
                 <th className="px-4 py-2 text-left ">Nome</th>
-                <th className="px-4 py-2 text-left">Idade</th>
-                <th className="px-4 py-2 text-left">E-mail</th>
+                <th className="px-4 py-2 text-left">Cargo</th>
+                <th className="px-4 py-2 text-left">Status</th>
                 <th className="px-4 py-2 text-left">Ação</th>
               </tr>
             </thead>
             <tbody>
               {employers.map((employers) => (
                 <tr key={employers.id} className="border-t border-slate-200">
-                  <td className="px-4 py-2">{employers.nome}</td>
-                  <td className="px-4 py-2">{employers.idade}</td>
-                  <td className="px-4 py-2">{employers.email}</td>
+                  <td className="px-4 py-2">{employers.name}</td>
+                  <td className="px-4 py-2">{employers.positionName}</td>
+                  <td className="px-4 py-2">{employers.employerStatus}</td>
                   <td className="px-4 py-2">
                     <div className="flex gap-2">
                       <button

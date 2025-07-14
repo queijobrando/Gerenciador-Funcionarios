@@ -17,8 +17,9 @@ function EmployersPage() {
 
   async function getEmployers(page = 1, name = "") {
     const res = await api.get("/employer/all", {
-      params: { page, name }
+      params: { page: page - 1, name }, // Backend usa páginas baseadas em 0
     });
+    console.log("Response data:", res.data); // Debug
     setEmployers(res.data.content);
     setTotalPages(res.data.totalPages);
   }
@@ -46,7 +47,6 @@ function EmployersPage() {
         </h1>
       </div>
       <hr className="border-slate-300 mb-6" />
-
       <div className="flex items-center justify-between mb-4">
         <input
           type="text"
@@ -62,33 +62,45 @@ function EmployersPage() {
           Novo
         </button>
       </div>
-
       <EmployersList
         employers={employers}
         setConfirmDelete={setConfirmDelete}
         setEmployerIdToDelete={setEmployerIdToDelete}
         onInfo={setSelectedEmployerId}
       />
-
+      {/* Informações de debug */}
+      <div className="mt-4 p-2 bg-gray-100 rounded text-sm text-gray-600">
+        <p>Total de funcionários: {employers.length}</p>
+        <p>Total de páginas: {totalPages}</p>
+        <p>Página atual: {currentPage}</p>
+      </div>
       {/* Paginação */}
+      {console.log("totalPages:", totalPages, "currentPage:", currentPage)}{" "}
+      {/* Debug */}
       {totalPages > 1 && (
         <div className="flex justify-center mt-6 gap-2">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === i + 1
-                  ? "bg-slate-700 text-white"
-                  : "bg-white text-slate-700"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-600">
+              Página {currentPage} de {totalPages}
+            </span>
+          </div>
+          <div className="flex gap-1">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 border rounded ${
+                  currentPage === i + 1
+                    ? "bg-slate-700 text-white"
+                    : "bg-white text-slate-700 hover:bg-slate-100"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
       )}
-
       {/* Modal de Exclusão */}
       {confirmDelete && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
@@ -120,12 +132,14 @@ function EmployersPage() {
           </div>
         </div>
       )}
-
       {/* Modal de Info */}
       {selectedEmployerId && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded shadow-lg p-8 min-w-[300px] relative">
-            <EmployerInfo id={selectedEmployerId} back={setSelectedEmployerId} />
+            <EmployerInfo
+              id={selectedEmployerId}
+              back={setSelectedEmployerId}
+            />
           </div>
         </div>
       )}

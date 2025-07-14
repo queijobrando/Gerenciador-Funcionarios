@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
-import EmployersPage from "./pages/Employers/employersPage";
+import EmployerLista from "./pages/Employers/employerLista";
 import EmployerForm from "./pages/Employers/employerForm";
 import EmployerEditPage from "./pages/Employers/employerEdit";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -43,7 +43,7 @@ function App() {
                     path="/employers"
                     element={
                       <ProtectedRoute>
-                        <EmployersPage />
+                        <EmployerLista />
                       </ProtectedRoute>
                     }
                   />
