@@ -31,6 +31,8 @@ function Form({ onSubmit }) {
     shouldUnregister: false,
   });
 
+  const stripNonDigits = (value) => value.replace(/\D/g, "");
+
   const handleNext = async () => {
     const isValid = await trigger([
       "name",
@@ -48,6 +50,11 @@ function Form({ onSubmit }) {
 
   const submitFinal = () => {
     const data = getValues();
+    data.birthdate = new Date(data.birthdate).toISOString().split("T")[0];
+    data.hiredate = new Date(data.hiredate).toISOString().split("T")[0];
+    data.cpf = stripNonDigits(data.cpf);
+    data.contact = stripNonDigits(data.contact);
+    data.cep = stripNonDigits(data.cep);
     onSubmit(data);
   };
 
@@ -77,7 +84,7 @@ function Form({ onSubmit }) {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(submitFinal)} className="min-h-[350px]">
+      <form className="min-h-[350px]">
         <AnimatePresence mode="wait" initial={false}>
           {step === 1 && (
             <motion.div
@@ -89,6 +96,7 @@ function Form({ onSubmit }) {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
             >
               <div>
+                <label className="block text-sm font-medium mb-1">Nome Completo</label>
                 <input
                   {...register("name", {
                     required: "Nome Completo é obrigatório",
@@ -104,11 +112,12 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Data de Nascimento</label>
                 <input
+                  type="date"
                   {...register("birthdate", {
                     required: "Data de Nascimento é obrigatória",
                   })}
-                  placeholder="Data de Nascimento"
                   className="input-style"
                 />
                 {errors.birthdate && (
@@ -119,11 +128,12 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Data de Admissão</label>
                 <input
+                  type="date"
                   {...register("hiredate", {
                     required: "Data de Admissão é obrigatória",
                   })}
-                  placeholder="Data de Admissão"
                   className="input-style"
                 />
                 {errors.hiredate && (
@@ -134,10 +144,12 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">CPF</label>
                 <input
                   {...register("cpf", { required: "CPF é obrigatório" })}
-                  placeholder="CPF"
                   className="input-style"
+                  type="text"
+                  placeholder="Insira o CPF"
                 />
                 {errors.cpf && (
                   <p className="text-red-500 text-sm mt-1">
@@ -147,6 +159,7 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
                 <input
                   {...register("email", { required: "E-mail é obrigatório" })}
                   type="email"
@@ -161,12 +174,16 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">
+                  Telefone
+                </label>
                 <input
                   {...register("contact", {
                     required: "Telefone de contato é obrigatório",
                   })}
-                  placeholder="Telefone"
                   className="input-style"
+                  type="text"
+                  placeholder="Insira o número"
                 />
                 {errors.contact && (
                   <p className="text-red-500 text-sm mt-1">
@@ -175,6 +192,7 @@ function Form({ onSubmit }) {
                 )}
               </div>
               <div>
+                <label className="block text-sm font-medium mb-1">Cargo</label>
                 <select
                   {...register("positionId", {
                     required: "Cargo é obrigatório",
@@ -210,6 +228,7 @@ function Form({ onSubmit }) {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
             >
               <div>
+                <label className="block text-sm font-medium mb-1">Logradouro</label>
                 <input
                   {...register("logradouro", {
                     required: "Logradouro é obrigatório",
@@ -225,6 +244,7 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Complemento</label>
                 <input
                   {...register("complemento")}
                   placeholder="Complemento"
@@ -233,6 +253,7 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Número</label>
                 <input
                   {...register("numero", { required: "Número é obrigatório" })}
                   placeholder="Número"
@@ -246,6 +267,7 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Bairro</label>
                 <input
                   {...register("bairro", { required: "Bairro é obrigatório" })}
                   placeholder="Bairro"
@@ -259,6 +281,7 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Cidade</label>
                 <input
                   {...register("cidade", { required: "Cidade é obrigatória" })}
                   placeholder="Cidade"
@@ -272,6 +295,7 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">Estado</label>
                 <input
                   {...register("estado", { required: "Estado é obrigatório" })}
                   placeholder="Estado"
@@ -285,10 +309,12 @@ function Form({ onSubmit }) {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-1">CEP</label>
                 <input
                   {...register("cep", { required: "CEP é obrigatório" })}
-                  placeholder="CEP"
                   className="input-style"
+                  type="text"
+                  placeholder="Insira o CEP"
                 />
                 {errors.cep && (
                   <p className="text-red-500 text-sm mt-1">
@@ -322,8 +348,9 @@ function Form({ onSubmit }) {
             </button>
           ) : (
             <button
-              type="submit"
+              type="button"
               disabled={isSubmitting}
+              onClick={handleSubmit(submitFinal)}
               className="px-4 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 transition"
             >
               {isSubmitting ? "Enviando..." : "Finalizar"}

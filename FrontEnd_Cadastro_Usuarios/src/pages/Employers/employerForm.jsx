@@ -10,6 +10,7 @@ function EmployerForm() {
   async function createEmployer(data) {
     try {
       await api.post("/employer/register", data);
+      toast.success("Funcionário registrado com sucesso!");
       navigate("/employers");
     } catch (error) {
       console.error("Erro ao criar funcionário:", error);
